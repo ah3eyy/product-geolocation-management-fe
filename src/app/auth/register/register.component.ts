@@ -4,7 +4,6 @@ import {UtilService} from "../../services/util.service";
 import {AuthService} from "../../services/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {GeolocationService} from '@ng-web-apis/geolocation';
 
 @Component({
   selector: 'app-register',
@@ -30,7 +29,6 @@ export class RegisterComponent implements OnInit {
     public authService: AuthService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private readonly geolocation$: GeolocationService
   ) {
   }
 
@@ -39,9 +37,59 @@ export class RegisterComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((e) => {
       this.registerModel.referred_by = e['referral']
     })
-    this.geolocation$.subscribe(position => this.updateUserCurrentLocation(position));
     this.registerInit();
   }
+
+  suggestedLocation: any[] = [];
+  searchLoader = false;
+  searchFailed = false;
+
+  onChangeAddress(event: any) {
+    let searchText = event.target.value;
+    if (!searchText)
+      this.suggestedLocation = [];
+
+    this.onSearchAddress(searchText)
+  }
+
+  searchCall: any;
+
+  selected_address: any;
+
+  onSearchAddress(searchText: String) {
+    if (this.searchCall)
+      this.searchCall.unsubscribe();
+
+    let address = searchText;
+    this.searchLoader = true;
+    this.searchFailed = false;
+
+    this.searchCall = this.userService.searchAddress(address).subscribe(
+      (response: any) => {
+        this.searchLoader = false;
+        this.searchFailed = false;
+        this.suggestedLocation = response.data;
+        console.log(response);
+      },
+      (error) => {
+        this.searchLoader = false;
+        this.searchFailed = true;
+      }
+    );
+  }
+
+  onSelectAddress(location: any) {
+    this.selected_address = location;
+    this.register.value['address'] = location.formattedAddress;
+    let latitude = location.latitude;
+    let longitude = location.longitude;
+    this.register.value['location'] = <any>[
+      latitude,
+      longitude
+    ];
+    this.suggestedLocation = [];
+  }
+
 
   location: any[] = [];
 

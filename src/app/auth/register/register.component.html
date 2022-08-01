@@ -59,11 +59,22 @@
             <div class="form-group mb-5">
               <input class="form-control h-auto form-control-solid py-4 px-8" type="text"
                      [ngClass]="{'is-invalid': submitted && register?.get('address')?.invalid}"
-                     placeholder="Address" name="address" formControlName="address"/>
+                     placeholder="Address" name="address" formControlName="address"
+                     (keyup)="onChangeAddress($event)"
+              />
               <div class="invalid-feedback" *ngIf="submitted && register?.get('address')?.invalid">
                 Address is required
               </div>
             </div>
+
+            <ng-container *ngIf="searchLoader">
+              <i class="fa fa-spin fa-spinner"></i>
+            </ng-container>
+
+            <ng-container *ngFor="let location of suggestedLocation">
+              <p (click)="onSelectAddress(location)">{{location?.formattedAddress}}</p>
+            </ng-container>
+
 
             <div class="form-group d-flex flex-wrap flex-center mt-10">
               <button id="kt_login_signup_submit"
