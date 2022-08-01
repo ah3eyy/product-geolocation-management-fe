@@ -5,9 +5,6 @@
 export const environment = {
   production: false,
   url: 'http://localhost:4500/api/',
-  flutterwave_pubkey: 'FLWPUBK_TEST-5684afa844abb02deeb286a4f4d38d98-X',
-  monnify_contract: '2767479359',
-  monnify_key: 'MK_TEST_QWYGUJXEDH'
 };
 
 /*
