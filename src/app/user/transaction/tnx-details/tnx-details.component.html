@@ -1,0 +1,250 @@
+<!--begin::Container-->
+<div class="container-xxl" id="kt_content_container">
+  <!--begin::Actions-->
+  <div class="d-flex align-items-center py-1">
+    <!--begin::Wrapper-->
+    <div class="me-4">
+          <span style="cursor: pointer; font-size: 16px;" (click)="onBack()"><i
+            class="fa fa-arrow-left"></i> </span>
+    </div>
+  </div>
+  <!--end::Actions-->
+
+
+  <ng-container *ngIf="loading">
+    <div class="flex justify-content-center" style="display: flex;margin-bottom: 20px;">
+      <div class="spinner-border"></div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="network">
+    <div class="flex justify-content-center" style="display: flex;margin-bottom: 20px;"
+         (click)="onFetchTransactionDetails()">
+      Network connection error. click to reload
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!network && !loading">
+
+    <div class="col-lg-5" style="margin: 0 auto;">
+      <!--begin::Sidebar-->
+      <div class="m-0">
+        <!--begin::Invoice 2 sidebar-->
+        <div
+          class="d-print-none border border-dashed border-gray-300 card-rounded h-lg-100 min-w-md-350px p-9 bg-lighten">
+          <!--begin::Labels-->
+          <div class="mb-8">
+                     <span class="badge  me-2"
+                           [ngClass]="{
+                                    'badge-light-success' : transactions?.transaction?.status == 'completed' || transactions?.transaction?.status == 'complete',
+                                    'badge-light-warning' :transactions?.transaction?.status == 'pending' || transactions?.transaction?.status == 'failed',
+                                    'badge-light-danger' :transactions?.transaction?.status == 'declined',
+                                    'badge-light-info' :transactions?.transaction?.status == 'processing'
+                                  }"
+                     >{{transactions?.transaction?.status.toUpperCase()}}</span>
+          </div>
+          <!--end::Labels-->
+          <!--begin::Title-->
+          <h6 class="mb-8 fw-boldest text-gray-600 text-hover-primary"
+              style="height: 100px; width: 50px; overflow: hidden;"
+              *ngIf="transactions?.transaction?.transactionable?.assets  || transactions?.transaction?.transactionable?.sub_service?.assets?.url">
+            <a
+
+              style="height: 100px; width: 50px; overflow: hidden;">
+              <img alt="Logo"
+                   [src]="transactions?.transaction?.transactionable?.assets?.url || transactions?.transaction?.transactionable?.sub_service?.assets?.url"
+                   style="width: 100%; height: 100%; object-fit: contain;">
+            </a>
+          </h6>
+          <!--end::Title-->
+          <!--begin::Item-->
+          <div class="mb-6">
+            <div class="fw-bold text-gray-600 fs-7"></div>
+            <div class="fw-bolder text-gray-800 fs-6">
+
+              <ng-container *ngIf="transactions?.transaction?.electricity_token">
+                <!--begin::Label-->
+                <div
+                  class="fw-bolder fs-3 text-gray-800 mb-8 text-center">{{transactions?.transaction?.electricity_token}}</div>
+                <!--end::Label-->
+              </ng-container>
+
+              <ng-container *ngIf="education">
+                <!--begin::Label-->
+                <div
+                  class="fw-bolder fs-3 text-gray-800 mb-8 text-center">{{education[0]['Pin'] || education['purchase_code']}}</div>
+                <!--end::Label-->
+              </ng-container>
+
+              <ng-container *ngIf="epin">
+                <!--begin::Label-->
+                <div
+                  class="fw-bolder fs-3 text-gray-800 mb-8 text-center">{{epin?.pin}}</div>
+                <!--end::Label-->
+              </ng-container>
+            </div>
+          </div>
+          <!--end::Title-->
+          <!--begin::Item-->
+          <div class="mb-6">
+            <div class="fw-bold text-gray-600 fs-7">Reference:</div>
+            <div class="fw-bolder text-gray-800 fs-6">{{transactions?.transaction?.reference}}</div>
+          </div>
+
+          <!--begin::Item-->
+          <div class="mb-6"
+               *ngIf="!transactions?.transaction?.airtime_to_cash_type && transactions?.transaction?.purchase_to">
+            <div class="fw-bold text-gray-600 fs-7">Purchase To:</div>
+            <div class="fw-bolder text-gray-800 fs-6">{{transactions?.transaction?.purchase_to}}</div>
+          </div>
+          <!--end::Item-->
+          <!--begin::Item-->
+          <div class="mb-6"
+               *ngIf="transactions?.transaction?.transactionable?.service?.display_name || transactions?.transaction?.transactionable?.sub_service?.service?.display_name">
+            <div class="fw-bold text-gray-600 fs-7">Service:</div>
+            <div class="fw-bolder text-gray-800 fs-6">
+              {{transactions?.transaction?.transactionable?.service?.display_name || transactions?.transaction?.transactionable?.sub_service?.service?.display_name}}
+            </div>
+          </div>
+          <!--end::Item-->
+          <!--begin::Item-->
+          <div class="mb-15"
+               *ngIf="transactions?.transaction?.transactionable?.display_name || transactions?.transaction?.transactionable?.sub_service?.display_name">
+            <div class="fw-bold text-gray-600 fs-7">Service Type:</div>
+            <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center">
+              {{transactions?.transaction?.transactionable?.display_name || transactions?.transaction?.transactionable?.sub_service?.display_name}}
+            </div>
+          </div>
+          <!--end::Item-->
+          <!--end::Item-->
+          <!--begin::Item-->
+          <div class="mb-15"
+               *ngIf="!transactions?.transaction?.transactionable?.display_name && transactions?.transaction?.transactionable?.name">
+            <div class="fw-bold text-gray-600 fs-7">Package:</div>
+            <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center">
+              {{transactions?.transaction?.transactionable?.name}}
+            </div>
+          </div>
+          <!--end::Item-->
+          <ng-container *ngIf="transactions?.transaction?.electricity_unit">
+            <!--begin::Item-->
+            <div class="mb-15">
+              <div class="fw-bold text-gray-600 fs-7">Electricity Unit:</div>
+              <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center">
+                {{transactions?.transaction?.electricity_unit}}
+              </div>
+            </div>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <div class="mb-15">
+              <div class="fw-bold text-gray-600 fs-7">Electricity Type:</div>
+              <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center">
+                {{transactions?.transaction?.electricity_type.toUpperCase()}}
+              </div>
+            </div>
+            <!--end::Item-->
+
+          </ng-container>
+
+          <ng-container *ngIf="education">
+
+            <!--begin::Item-->
+            <div class="mb-15">
+              <div class="fw-bold text-gray-600 fs-7">Serial Number:</div>
+              <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center">
+                {{education[0]['serial'] || '--'}}
+              </div>
+            </div>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <div class="mb-15">
+              <div class="fw-bold text-gray-600 fs-7">Pin:</div>
+              <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center">
+                {{education[0]['Pin'] || education['purchase_code']}}
+              </div>
+            </div>
+            <!--end::Item-->
+
+          </ng-container>
+
+
+          <ng-container *ngIf="transactions?.transaction?.airtime_to_cash_type">
+            <!--begin::Item-->
+            <div class="mb-15">
+              <div class="fw-bold text-gray-600 fs-7">Type:</div>
+              <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center">
+                {{transactions?.transaction?.airtime_to_cash_type == 'pin' ? 'Pin' : 'Share N Sell'}}
+              </div>
+            </div>
+            <!--end::Item-->      <!--begin::Item-->
+            <div class="mb-15">
+              <div
+                class="fw-bold text-gray-600 fs-7">{{transactions?.transaction?.airtime_to_cash_type == 'pin' ? 'Pin' : 'Share N Sell'}}
+                :
+              </div>
+              <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center">
+                {{transactions?.transaction?.purchase_to}}
+              </div>
+            </div>
+            <!--end::Item-->
+          </ng-container>
+
+          <!--begin::Item-->
+          <div class="mb-6">
+            <div class="fw-bold text-gray-600 fs-7">Description:</div>
+            <div class="fw-bolder text-gray-800 fs-6">{{transactions?.transaction?.description || '--'}}</div>
+          </div>
+
+          <!--begin::Item-->
+          <div class="mb-6">
+            <div class="fw-bold text-gray-600 fs-7">Balance:</div>
+            <div class="fw-bolder text-gray-800 fs-6">
+             Previous Balance :  {{(transactions?.transaction?.payment_description |balanceBreakdown)['previous']}} <br>
+             Current Balance :  {{(transactions?.transaction?.payment_description |balanceBreakdown)['current']}}
+            </div>
+          </div>
+
+          <!--begin::Item-->
+          <div class="mb-6">
+            <div class="fw-bold text-gray-600 fs-7">Transaction Type:</div>
+            <div
+              class="fw-bolder text-gray-800 fs-6">
+              {{
+              transactions?.transaction?.transaction_type == 'funding' ? 'Funding' :
+                transactions?.transaction?.transaction_type == 'refund' ? 'Refund' :
+                  transactions?.transaction?.transaction_type == 'charge' ? 'Charges on transaction' : 'Service Purchase'
+              }}
+            </div>
+          </div>
+
+          <!--end::Item-->      <!--begin::Item-->
+          <div class="mb-15">
+            <div class="fw-bold text-gray-600 fs-7">Initiated On:</div>
+            <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center">
+              {{transactions?.transaction?.created_at | date : 'medium'}}
+            </div>
+          </div>
+          <!--end::Item-->
+
+          <!--begin::Item-->
+          <div class="mb-6">
+            <div class="fw-bold text-gray-600 fs-7">Amount:</div>
+            <div class="fw-bolder text-gray-800 fs-6">₦{{transactions?.transaction?.amount}}</div>
+          </div>
+          <!--end::Item-->
+          <!--begin::Item-->
+          <div class="m-0">
+            <div class="fw-bold text-gray-600 fs-7">Amount Charge</div>
+            <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center">
+              ₦{{transactions?.transaction?.charge_amount}}
+            </div>
+          </div>
+          <!--end::Item-->
+        </div>
+        <!--end::Invoice 2 sidebar-->
+      </div>
+      <!--end::Sidebar-->
+    </div>
+
+  </ng-container>
+</div>

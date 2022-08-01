@@ -1,0 +1,447 @@
+<div class="container-xxl" id="kt_content_container">
+
+  <div class="col-lg-6" style="margin: 0 auto;">
+
+    <div class="card" style="padding: 20px;">
+
+      <div class="fv-row mb-10">
+        <div class="row fv-row mb-7">
+          <app-notification [type]="type" [message]="message" [title]="title"></app-notification>
+        </div>
+      </div>
+
+      <ng-container *ngIf="current_tap == 'email'">
+
+        <div [ngClass]="{'current' : current_tap == 'email'}" data-kt-stepper-element="content">
+          <!--begin::Wrapper-->
+          <div class="w-100">
+            <!--begin::Heading-->
+            <div class="pb-10 pb-lg-15">
+              <!--begin::Title-->
+              <h2 class="fw-bolder text-dark">Email Verification</h2>
+              <div class="stepper-desc fw-bold">use code sent to email to verify account.</div>
+              <!--end::Title-->
+              <!--begin::Notice-->
+
+            </div>
+            <!--end::Heading-->
+            <!--begin::Input group-->
+            <div class="d-flex flex-column mb-7 fv-row">
+              <!--begin::Label-->
+              <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                <span class="required">Verification Code</span>
+              </label>
+              <!--end::Label-->
+              <input type="text" class="form-control form-control-solid" placeholder=""
+                     [(ngModel)]="verify_email_query.code"
+                     name="card_name"/>
+            </div>
+            <!--end::Input group-->
+
+            <ng-container *ngIf="!resend_loader">
+              <div class="d-flex flex-stack justify-content-center" (click)="onResendEmailVerification()">
+                <!--begin::Label-->
+                <div class="me-5" style="cursor: pointer;">
+                  <label class="fs-6 fw-bold form-label">Resend Verification Code </label>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="resend_loader">
+              <div class="d-flex flex-stack justify-content-center">
+                <!--begin::Label-->
+                <div class="me-5">
+                  <label class="fs-6 fw-bold form-label">Resending <i class="fa fa-spin fa-spinner"></i> </label>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="d-flex flex-stack pt-15 justify-content-center">
+              <div class="mr-2">
+                <button type="button" class="btn btn-lg btn-light-primary me-3"
+                        (click)="onVerifyEmailAddress()"
+                        [disabled]="verify_email_loader"
+                >
+
+                  {{verify_email_loader ? 'Please wait' : 'Verify Email'}}
+
+                  <span class="svg-icon svg-icon-4 ms-2" *ngIf="!verify_email_loader">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                               fill="none">
+                            <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1"
+                                  transform="rotate(-180 18 13)" fill="black"/>
+                            <path
+                              d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z"
+                              fill="black"/>
+                          </svg>
+                        </span>
+
+                  <span *ngIf="verify_email_loader"><i class="fa fa-spin fa-spinner"></i></span>
+
+                </button>
+              </div>
+            </div>
+
+            <!--end::Input group-->
+          </div>
+          <!--end::Wrapper-->
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="current_tap == 'phone'">
+
+        <div [ngClass]="{'current' : current_tap == 'phone'}" data-kt-stepper-element="content">
+          <!--begin::Wrapper-->
+          <div class="w-100">
+            <!--begin::Heading-->
+            <div class="pb-10 pb-lg-15">
+              <!--begin::Title-->
+              <h2 class="fw-bolder text-dark">Phone Number Verification</h2>
+              <div class="stepper-desc fw-bold">use code sent to phone number to verify account.</div>
+              <!--end::Title-->
+              <!--begin::Notice-->
+
+            </div>
+            <!--end::Heading-->
+            <!--begin::Input group-->
+            <div class="d-flex flex-column mb-7 fv-row">
+              <!--begin::Label-->
+              <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                <span class="required">Verification Code</span>
+              </label>
+              <!--end::Label-->
+              <input type="text" class="form-control form-control-solid" placeholder=""
+                     [(ngModel)]="verify_phone_query.code"
+                     name="card_name"/>
+            </div>
+            <!--end::Input group-->
+
+            <ng-container *ngIf="!resend_loader">
+              <div class="d-flex flex-stack justify-content-center" (click)="onResendEmailVerification()">
+                <!--begin::Label-->
+                <div class="me-5" style="cursor: pointer;">
+                  <label class="fs-6 fw-bold form-label">Resend Verification Code </label>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="resend_loader">
+              <div class="d-flex flex-stack justify-content-center">
+                <!--begin::Label-->
+                <div class="me-5">
+                  <label class="fs-6 fw-bold form-label">Resending <i class="fa fa-spin fa-spinner"></i> </label>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="d-flex flex-stack pt-15 justify-content-center">
+              <div class="mr-2">
+                <button type="button" class="btn btn-lg btn-light-primary me-3"
+                        (click)="onVerifyPhoneNumber()"
+                        [disabled]="verify_phone_loader"
+                >
+
+                  {{verify_phone_loader ? 'Please wait' : 'Verify Phone Number'}}
+
+                  <span class="svg-icon svg-icon-4 ms-2" *ngIf="!verify_email_loader">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                               fill="none">
+                            <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1"
+                                  transform="rotate(-180 18 13)" fill="black"/>
+                            <path
+                              d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z"
+                              fill="black"/>
+                          </svg>
+                        </span>
+
+                  <span *ngIf="verify_phone_loader"><i class="fa fa-spin fa-spinner"></i></span>
+
+                </button>
+              </div>
+            </div>
+
+            <!--end::Input group-->
+          </div>
+          <!--end::Wrapper-->
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="current_tap == 'bvn'">
+
+        <div class="w-100">
+
+
+        </div>
+
+        <div [ngClass]="{'current' : current_tap == 'bvn'}" data-kt-stepper-element="content">
+          <!--begin::Wrapper-->
+          <div class="w-100">
+            <ng-container *ngIf="!on_proceed_to_confirm">
+              <!--begin::Heading-->
+              <div class="pb-10 pb-lg-15">
+                <!--begin::Title-->
+                <h2 class="fw-bolder text-dark">BVN Verification</h2>
+                <!--              <div class="badge badge-light-info w-100">-->
+                <p>What risks come with exposing your BVN?</p>
+
+                <p>Absolutely, no risk! Nothing to worry about, YOU ARE SAFE.</p>
+
+                <div>
+
+                  BVN, means Bank Verification Number. The Central Bank of Nigeria introduced it to “uniquely verify the
+                  identity of each Bank’s customer. The apex bank had argued that this initiative for ‘know your
+                  customer'
+                  (KYC) purposes”, is designed to reduce fraud activities and to increase the efficiency of banking
+                  operations. Customers accessing credit facilities would also be an added beneficiary from the CBN’s
+                  initiative.
+                </div>
+
+                <p style="max-width: 100%;width: 100%;overflow: hidden;">
+                  Giving out bvn does not give people access to your money, worst that could happen when people have
+                  access to your BVN is to know your details (Name, DOB, Phone number, state). It is useless if you
+                  did not give other personal details about the bank account.
+                </p>
+
+                <p>You can also google search "What risks comes with exposing your BVN" and you will understand<br>
+                  better.
+                </p>
+
+                <p class="badge badge-light-info" style="max-width: 100%;width: 100%;overflow: hidden;">However, We have designed a means to protect
+                  our customers in compliance with <br>the KYC POLICY. Know that
+                  IBROLINKS will not disclose your details <br>with an unauthorised third party.
+                </p>
+
+                <!--begin::Notice-->
+
+              </div>
+              <!--end::Heading-->
+
+              <div class="d-flex flex-stack justify-content-center">
+                <div class="mr-2">
+                  <button type="button" class="btn btn-lg btn-light-primary me-3"
+                          (click)="onProceedToConfirm()"
+                  >
+
+                    Confirm & Proceed to Verify BVN
+
+                    <span class="svg-icon svg-icon-4 ms-2" *ngIf="!bvn_verification_loader">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                               fill="none">
+                            <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1"
+                                  transform="rotate(-180 18 13)" fill="black"/>
+                            <path
+                              d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z"
+                              fill="black"/>
+                          </svg>
+                        </span>
+
+                  </button>
+
+
+                  <span class="badge badge-light-success" style="margin-top: 30px;">Note that your bvn and its information is safe.</span>
+                </div>
+              </div>
+
+
+            </ng-container>
+
+            <ng-container *ngIf="on_proceed_to_confirm">
+
+              <!--              </div>-->
+              <div class="stepper-desc fw-bold">Ensure to use bvn linked to your phone number, or full name tally and
+
+                has the correct date of birth. (Your account would be charged NGN50)
+              </div>
+              <!--end::Title-->
+
+              <!--begin::Input group-->
+              <div class="d-flex flex-column mb-7 fv-row">
+                <!--begin::Label-->
+                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                  <span class="required">Enter Bank Verification Number (BVN)</span>
+                </label>
+                <!--end::Label-->
+                <input type="number" class="form-control form-control-solid" placeholder="Enter BVN"
+                       [(ngModel)]="bvn_verification_query.bvn"
+                       name="card_name"/>
+              </div>
+              <!--end::Input group-->
+
+              <div class="d-flex flex-stack pt-15 justify-content-center">
+                <div class="mr-2">
+                  <button type="button" class="btn btn-lg btn-light-primary me-3"
+                          (click)="onBVNVerification()"
+                          [disabled]="bvn_verification_loader"
+                  >
+
+                    {{bvn_verification_loader ? 'Please wait' : 'Verify BVN'}}
+
+                    <span class="svg-icon svg-icon-4 ms-2" *ngIf="!bvn_verification_loader">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                               fill="none">
+                            <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1"
+                                  transform="rotate(-180 18 13)" fill="black"/>
+                            <path
+                              d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z"
+                              fill="black"/>
+                          </svg>
+                        </span>
+
+                    <span *ngIf="bvn_verification_loader"><i class="fa fa-spin fa-spinner"></i></span>
+
+                  </button>
+
+
+                  <span class="badge badge-light-success" style="margin-top: 30px;">Note that your bvn and its information is save.</span>
+                </div>
+              </div>
+            </ng-container>
+
+            <!--end::Input group-->
+          </div>
+          <!--end::Wrapper-->
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="current_tap == 'pin'">
+
+        <div [ngClass]="{'current' : current_tap == 'pin'}" data-kt-stepper-element="content">
+          <!--begin::Wrapper-->
+          <div class="w-100">
+            <!--begin::Heading-->
+            <div class="pb-10 pb-lg-15">
+              <!--begin::Title-->
+              <h2 class="fw-bolder text-dark">Set Transaction Pin</h2>
+              <div class="stepper-desc fw-bold">set pin to confirm transactions.</div>
+              <!--end::Title-->
+              <!--begin::Notice-->
+
+            </div>
+            <!--end::Heading-->
+            <!--begin::Input group-->
+            <div class="d-flex flex-column mb-7 fv-row">
+              <!--begin::Label-->
+              <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                <span class="required">Transaction Pin</span>
+              </label>
+              <!--end::Label-->
+              <input type="number" class="form-control form-control-solid" placeholder=""
+                     [(ngModel)]="set_pin_query.pin"
+                     name="card_name"/>
+            </div>
+            <!--end::Input group-->
+
+            <!--begin::Input group-->
+            <div class="d-flex flex-column mb-7 fv-row">
+              <!--begin::Label-->
+              <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                <span class="required">Confirm Transaction Pin</span>
+              </label>
+              <!--end::Label-->
+              <input type="number" class="form-control form-control-solid" placeholder=""
+                     [(ngModel)]="set_pin_query.confirm_pin"
+                     name="card_name"/>
+            </div>
+            <!--end::Input group-->
+
+
+            <div class="d-flex flex-stack pt-15 justify-content-center">
+              <div class="mr-2">
+                <button type="button" class="btn btn-lg btn-light-primary me-3"
+                        (click)="onSetPin()"
+                        [disabled]="set_pin_loader"
+                >
+
+                  {{verify_phone_loader ? 'Please wait' : 'Set Transaction Pin'}}
+
+                  <span class="svg-icon svg-icon-4 ms-2" *ngIf="!set_pin_loader">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                               fill="none">
+                            <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1"
+                                  transform="rotate(-180 18 13)" fill="black"/>
+                            <path
+                              d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z"
+                              fill="black"/>
+                          </svg>
+                        </span>
+
+                  <span *ngIf="set_pin_loader"><i class="fa fa-spin fa-spinner"></i></span>
+
+                </button>
+              </div>
+            </div>
+
+            <!--end::Input group-->
+          </div>
+          <!--end::Wrapper-->
+        </div>
+
+      </ng-container>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!--&lt;!&ndash;begin::Step 1&ndash;&gt;-->
+<!--<div class="stepper-item" [ngClass]="{'current' : current_tap == 'email'}" data-kt-stepper-element="nav">-->
+<!--  &lt;!&ndash;begin::Line&ndash;&gt;-->
+<!--  <div class="stepper-line w-40px"></div>-->
+<!--  &lt;!&ndash;end::Line&ndash;&gt;-->
+<!--  &lt;!&ndash;begin::Icon&ndash;&gt;-->
+<!--  <div class="stepper-icon w-40px h-40px">-->
+<!--    <i class="stepper-check fas fa-check"></i>-->
+<!--    <span class="stepper-number">1</span>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;end::Icon&ndash;&gt;-->
+<!--  &lt;!&ndash;begin::Label&ndash;&gt;-->
+<!--  <div class="stepper-label">-->
+<!--    <h3 class="stepper-title">Verify Email Address</h3>-->
+<!--    <div class="stepper-desc fw-bold">use code sent to email to verify account.</div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;end::Label&ndash;&gt;-->
+<!--</div>-->
+<!--&lt;!&ndash;end::Step 1&ndash;&gt;-->
+<!--&lt;!&ndash;begin::Step 2&ndash;&gt;-->
+<!--<div class="stepper-item" [ngClass]="{'current' : current_tap == 'phone'}" data-kt-stepper-element="nav">-->
+<!--  &lt;!&ndash;begin::Line&ndash;&gt;-->
+<!--  <div class="stepper-line w-40px"></div>-->
+<!--  &lt;!&ndash;end::Line&ndash;&gt;-->
+<!--  &lt;!&ndash;begin::Icon&ndash;&gt;-->
+<!--  <div class="stepper-icon w-40px h-40px">-->
+<!--    <i class="stepper-check fas fa-check"></i>-->
+<!--    <span class="stepper-number">2</span>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;end::Icon&ndash;&gt;-->
+<!--  &lt;!&ndash;begin::Label&ndash;&gt;-->
+<!--  <div class="stepper-label">-->
+<!--    <h3 class="stepper-title">Verify Phone Number</h3>-->
+
+<!--  </div>-->
+<!--  &lt;!&ndash;end::Label&ndash;&gt;-->
+<!--</div>-->
+<!--&lt;!&ndash;end::Step 2&ndash;&gt;-->
+<!--&lt;!&ndash;begin::Step 3&ndash;&gt;-->
+<!--<div class="stepper-item" [ngClass]="{'current' : current_tap == 'pin'}" data-kt-stepper-element="nav">-->
+<!--  &lt;!&ndash;begin::Line&ndash;&gt;-->
+<!--  <div class="stepper-line w-40px"></div>-->
+<!--  &lt;!&ndash;end::Line&ndash;&gt;-->
+<!--  &lt;!&ndash;begin::Icon&ndash;&gt;-->
+<!--  <div class="stepper-icon w-40px h-40px">-->
+<!--    <i class="stepper-check fas fa-check"></i>-->
+<!--    <span class="stepper-number">3</span>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;end::Icon&ndash;&gt;-->
+<!--  &lt;!&ndash;begin::Label&ndash;&gt;-->
+<!--  <div class="stepper-label">-->
+<!--    <h3 class="stepper-title">Set Transaction Pin</h3>-->
+
+<!--  </div>-->
+<!--  &lt;!&ndash;end::Label&ndash;&gt;-->
+<!--</div>-->
+<!--&lt;!&ndash;end::Step 3&ndash;&gt;-->

@@ -1,0 +1,60 @@
+<!--begin::Alert-->
+<div class="alert alert-primary" *ngIf="type == 'info'">
+  <!--begin::Icon-->
+  <span class="svg-icon svg-icon-2hx svg-icon-primary me-3">...</span>
+  <!--end::Icon-->
+
+  <!--begin::Wrapper-->
+  <div class="d-flex flex-column">
+    <!--begin::Title-->
+    <h4 class="mb-1 text-dark">{{title}}</h4>
+    <!--end::Title-->
+    <!--begin::Content-->
+    <span>{{message}}</span>
+    <!--end::Content-->
+  </div>
+  <!--end::Wrapper-->
+</div>
+<!--end::Alert-->
+
+
+<!--begin::Alert-->
+<div class="alert alert-success" *ngIf="type == 'success'">
+  <!--begin::Icon-->
+  <span class="svg-icon svg-icon-2hx svg-icon-primary me-3">...</span>
+  <!--end::Icon-->
+
+  <!--begin::Wrapper-->
+  <div class="d-flex flex-column">
+    <!--begin::Title-->
+    <h4 class="mb-1 text-dark">{{title}}</h4>
+    <!--end::Title-->
+    <!--begin::Content-->
+    <span>{{message}}</span>
+    <!--end::Content-->
+  </div>
+  <!--end::Wrapper-->
+</div>
+<!--end::Alert-->
+
+
+<!--begin::Alert-->
+<div class="alert alert-danger" *ngIf="type == 'error'">
+  <!--begin::Icon-->
+  <span class="svg-icon svg-icon-2hx svg-icon-primary me-3">...</span>
+  <!--end::Icon-->
+
+  <!--begin::Wrapper-->
+  <div class="d-flex flex-column">
+    <!--begin::Title-->
+    <h4 class="mb-1 text-dark">{{title}}</h4>
+    <!--end::Title-->
+    <!--begin::Content-->
+    <span>{{message}}</span>
+    <!--end::Content-->
+  </div>
+  <!--end::Wrapper-->
+</div>
+<!--end::Alert-->
+
+

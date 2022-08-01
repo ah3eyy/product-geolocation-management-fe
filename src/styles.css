@@ -1,0 +1,89 @@
+@import 'assets/plugins/global/plugins.bundle.css';
+@import 'assets/plugins/custom/prismjs/prismjs.bundle.css';
+@import 'assets/css/style.bundle.css';
+
+.subtle {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.mat-dialog-container {
+  padding: 0 !important;
+}
+
+.aside {
+  background-color: #4169E1 !important;
+}
+
+.nav-link.active .nav-text {
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  color: #4169E1 !important;
+}
+
+.btn.btn-info {
+  color: #ffffff;
+  background-color: #4169E1 !important;
+  border-color: #4169E1 !important;
+}
+
+.svg-icon.svg-icon-primary svg g [fill] {
+  transition: fill 0.3s ease;
+  fill: #4169E1 !important;
+}
+
+.btn.btn-light-success:not(:disabled):not(.disabled):active:not(.btn-text), .btn.btn-light-success:not(:disabled):not(.disabled).active, .show > .btn.btn-light-success.dropdown-toggle, .show .btn.btn-light-success.btn-dropdown {
+  color: #ffffff;
+  background-color: #050C74 !important;
+  border-color: transparent;
+}
+
+.btn.btn-light-success {
+  color: #ffffff;
+  background-color: #050C74 !important;
+  border-color: transparent;
+}
+
+
+.btn.btn-primary {
+  background-color: #050C74 !important;
+}
+
+.aside {
+  background-color: #050C74 !important;
+}
+
+.btn .btn-info {
+  background-color: #050C74 !important;
+}
+
+
+.btn .btn-light-primary {
+  background-color: #050C74 !important;
+}
+
+.btn.btn-info {
+  color: #ffffff;
+  background-color: #050C74 !important;
+  border-color: #050C74 !important;
+}
+
+.btn.btn-dark {
+  color: #ffffff;
+  background-color: #050C74 !important;
+  border-color: #050C74 !important;
+}
+
+.btn-dark {
+  color: #ffffff;
+  background-color: #050C74 !important;
+  border-color: #050C74 !important;
+}
+
+.menu-title {
+  color: #FFFFFF !important;
+}
+
+.padding-urgent-0{
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}

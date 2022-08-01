@@ -1,0 +1,107 @@
+<div class="d-flex flex-column flex-root" style="height: 100vh;">
+  <!--begin::Login-->
+  <div class="login login-4 login-signin-on d-flex flex-row-fluid" id="kt_login">
+    <div class="d-flex flex-center flex-row-fluid bgi-size-cover bgi-position-top bgi-no-repeat"
+         style="background-image: url('assets/media/bg/bg-3.jpg');">
+      <div class="login-form text-center p-7 position-relative overflow-hidden">
+        <!--begin::Login Header-->
+
+        <!--end::Login Sign in form-->
+        <!--begin::Login Sign up form-->
+        <div class="login-signin" style="margin-top: -20px;">
+          <div class="mb-20" style="margin-bottom: 10px !important;">
+            <h3>Sign Up</h3>
+            <div class="text-muted font-weight-bold">Enter your details to create your account</div>
+          </div>
+          <form class="form" id="kt_login_signup_form" [formGroup]="register" (ngSubmit)="onRegisterAccount()">
+
+            <div class="fv-row mb-10">
+              <div class="row fv-row mb-7">
+                <app-notification [type]="type" [message]="message" [title]="title"></app-notification>
+              </div>
+            </div>
+
+            <div class="form-group mb-5">
+              <input class="form-control h-auto form-control-solid py-4 px-8" type="text"
+                     [ngClass]="{'is-invalid': submitted && register?.get('name')?.invalid}"
+                     placeholder="Fullname" name="fullname" formControlName="name"/>
+              <div class="invalid-feedback" *ngIf="submitted && register?.get('name')?.invalid">
+                Full name is required
+              </div>
+            </div>
+            <div class="form-group mb-5">
+              <input class="form-control h-auto form-control-solid py-4 px-8 is-invalid" type="text"
+                     [ngClass]="{'is-invalid': submitted && register?.get('email')?.invalid}"
+                     placeholder="Email" name="email" autocomplete="off" formControlName="email"/>
+              <div class="invalid-feedback" *ngIf="submitted && register?.get('email')?.invalid">Valid Email
+                Address is required
+              </div>
+            </div>
+            <div class="form-group mb-5">
+              <input class="form-control h-auto form-control-solid py-4 px-8" type="text"
+                     [ngClass]="{'is-invalid': submitted && register?.get('phone_number')?.invalid}"
+                     placeholder="Phone Number" name="phone_number" autocomplete="off" formControlName="phone_number"/>
+              <div class="invalid-feedback" *ngIf="submitted && register?.get('phone_number')?.invalid">
+                Valid Phone Number is required
+              </div>
+            </div>
+
+
+            <div class="form-group mb-5">
+              <input class="form-control h-auto form-control-solid py-4 px-8" type="password"
+                     [ngClass]="{'is-invalid': submitted && register?.get('password')?.invalid}"
+                     placeholder="Password" name="password" formControlName="password"/>
+              <div class="invalid-feedback" *ngIf="submitted && register?.get('password')?.invalid">
+                Password is required
+              </div>
+            </div>
+
+            <div class="form-group mb-5">
+              <input class="form-control h-auto form-control-solid py-4 px-8" type="text"
+                     [ngClass]="{'is-invalid': submitted && register?.get('address')?.invalid}"
+                     placeholder="Address" name="address" formControlName="address"/>
+              <div class="invalid-feedback" *ngIf="submitted && register?.get('address')?.invalid">
+                Address is required
+              </div>
+            </div>
+
+            <div class="form-group d-flex flex-wrap flex-center mt-10">
+              <button id="kt_login_signup_submit"
+                      class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2" type="submit"
+                      [disabled]="loading">
+                Sign Up <i class="fa fa-spin fa-spinner" *ngIf="loading"></i>
+              </button>
+              <button routerLink="" class="btn btn-light-primary font-weight-bold px-9 py-4 my-3 mx-2">Cancel
+              </button>
+            </div>
+          </form>
+
+        </div>
+        <!--end::Login Sign up form-->
+        <!--begin::Login forgot password form-->
+        <div class="login-forgot">
+          <div class="mb-20">
+            <h3>Forgotten Password ?</h3>
+            <div class="text-muted font-weight-bold">Enter your email to reset your password</div>
+          </div>
+          <form class="form" id="kt_login_forgot_form">
+            <div class="form-group mb-10">
+              <input class="form-control form-control-solid h-auto py-4 px-8" type="text"
+                     placeholder="Email" name="email" autocomplete="off"/>
+            </div>
+            <div class="form-group d-flex flex-wrap flex-center mt-10">
+              <button id="kt_login_forgot_submit"
+                      class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2">Request
+              </button>
+              <button id="kt_login_forgot_cancel"
+                      class="btn btn-light-primary font-weight-bold px-9 py-4 my-3 mx-2">Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+        <!--end::Login forgot password form-->
+      </div>
+    </div>
+  </div>
+  <!--end::Login-->
+</div>

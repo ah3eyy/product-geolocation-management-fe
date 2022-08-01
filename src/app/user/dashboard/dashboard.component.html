@@ -1,0 +1,47 @@
+<!--begin::Container-->
+<div class="container-xxl" id="kt_content_container">
+
+  <!--begin::Row-->
+  <div class="row g-6 g-xl-9 mb-6 mb-xl-9">
+
+    <ng-container *ngFor="let item of data">
+
+      <!--begin::Col-->
+      <div class="col-md-6 col-lg-4 col-xl-3" (click)="onViewDetails(item)">
+        <!--begin::Card-->
+        <div class="card h-100">
+          <!--begin::Card body-->
+          <div class="card-body d-flex justify-content-center text-center flex-column p-8">
+            <!--begin::Name-->
+            <a class="text-gray-800 text-hover-primary d-flex flex-column">
+              <!--begin::Image-->
+              <div class="symbol symbol-60px mb-5">
+                <ng-container *ngIf="item?.images.length > 0">
+                  <img [src]="item?.images[1]['url']" alt="">
+                </ng-container>
+              </div>
+              <!--end::Image-->
+              <!--begin::Title-->
+              <div class="fs-5 fw-bolder mb-2">{{item?.name}}</div>
+              <!--end::Title-->
+            </a>
+            <!--end::Name-->
+            <!--begin::Description-->
+            <div class="fs-7 fw-bold text-gray-400">{{item?.address}}</div>
+            <!--end::Description-->
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+      </div>
+      <!--end::Col-->
+
+    </ng-container>
+
+
+  </div>
+  <!--end:Row-->
+
+
+</div>
+<!--end::Container-->

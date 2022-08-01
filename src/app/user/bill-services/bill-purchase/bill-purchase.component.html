@@ -1,0 +1,979 @@
+<!--begin::Container-->
+<div class="container-xxl" id="kt_content_container">
+
+  <div>
+    <span style="cursor: pointer; font-size: 16px;" (click)="onBack()"><i class="fa fa-arrow-left"></i> </span>
+  </div>
+
+  <div class="col-lg-6" style="margin: 0 auto;">
+
+    <!--begin::Input group-->
+    <div class="fv-row mb-10">
+      <div class="row fv-row mb-7">
+        <app-notification [type]="type" [message]="message" [title]="title"></app-notification>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!preview">
+
+      <ng-container *ngIf="service_type == 'airtime'">
+
+        <!--begin::Card-->
+        <div class="card card-flush pt-3 mb-5 mb-xl-10">
+          <!--begin::Card header-->
+          <div class="card-header">
+            <!--begin::Card title-->
+            <div class="card-title">
+              <h2 class="fw-bolder">{{bills?.services?.display_name}} Purchase</h2>
+            </div>
+            <!--begin::Card title-->
+
+          </div>
+          <!--end::Card header-->
+          <!--begin::Card body-->
+          <div class="card-body pt-3">
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Network</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.sub_service_id">
+                <option value="">Select Network</option>
+                <ng-container *ngFor="let network of bills?.sub_services">
+                  <option [value]="network?.id">{{network?.display_name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Phone Number</label>
+              <input type="text" class="form-control form-control-solid" [(ngModel)]="initialize_query.biller_number"
+                     placeholder="Phone number to purchase to"/>
+            </div>
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Amount</label>
+              <input type="number" class="form-control form-control-solid"
+                     [(ngModel)]="initialize_query.amount"
+                     placeholder="Enter Purchase Amount"/>
+            </div>
+
+
+            <button class="btn btn-primary"
+                    [disabled]=" (initialize_data?.sub_service_id && initialize_query.biller_number && initialize_query.amount) || initialize_loader"
+                    (click)="onInitializePurchase()">
+              Confirm Purchase <span *ngIf="initialize_loader"><i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+
+      </ng-container>
+
+      <!--      airtime stops here-->
+
+      <ng-container *ngIf="service_type == 'data'">
+
+
+        <!--begin::Card-->
+        <div class="card card-flush pt-3 mb-5 mb-xl-10">
+          <!--begin::Card header-->
+          <div class="card-header">
+            <!--begin::Card title-->
+            <div class="card-title">
+              <h2 class="fw-bolder">{{bills?.services?.display_name}} Purchase</h2>
+            </div>
+            <!--begin::Card title-->
+
+          </div>
+          <!--end::Card header-->
+          <!--begin::Card body-->
+          <div class="card-body pt-3">
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Network</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.sub_service_id"
+                      (change)="onChangeDataNetwork($event)"
+              >
+                <option value="">Select Network</option>
+                <ng-container *ngFor="let network of bills?.sub_services">
+                  <option [value]="network?.id">{{network?.display_name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Data Group</label>
+              <select class="form-control form-control-solid" (change)="onChangeGroupData($event)">
+                <option value="">Select Data Group</option>
+                <ng-container *ngFor="let group of bills?.data_grouped">
+                  <option [value]="group?.id">{{group?.name || group}}</option>
+                </ng-container>
+                <option [value]="null">Others</option>
+              </select>
+            </div>
+
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Data Plan</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.package_id"
+                      (change)="onSelectPlanPackage()"
+              >
+                <option value="">Select Data Plan</option>
+                <ng-container *ngFor="let data of plan">
+                  <option [value]="data?.id">{{data?.name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Phone Number</label>
+              <input type="text" class="form-control form-control-solid" [(ngModel)]="initialize_query.biller_number"
+                     placeholder="Phone number to purchase to"/>
+            </div>
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Amount</label>
+              <input type="number" class="form-control form-control-solid"
+                     [readOnly]="true"
+                     [(ngModel)]="initialize_query.amount"
+                     placeholder="Enter Purchase Amount"/>
+            </div>
+
+
+            <button class="btn btn-primary"
+                    [disabled]=" (initialize_data?.sub_service_id && initialize_query.biller_number && initialize_query.amount) || initialize_loader"
+                    (click)="onInitializePurchase()">
+              Confirm Purchase <span *ngIf="initialize_loader"><i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+
+
+      </ng-container>
+
+      <!--      data stops here-->
+
+      <ng-container *ngIf="service_type == 'electricity'">
+
+
+        <!--begin::Card-->
+        <div class="card card-flush pt-3 mb-5 mb-xl-10">
+          <!--begin::Card header-->
+          <div class="card-header">
+            <!--begin::Card title-->
+            <div class="card-title">
+              <h2 class="fw-bolder">{{bills?.services?.display_name}} Purchase</h2>
+            </div>
+            <!--begin::Card title-->
+
+          </div>
+          <!--end::Card header-->
+          <!--begin::Card body-->
+          <div class="card-body pt-3">
+
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Meter Number</label>
+              <input type="text" class="form-control form-control-solid" [(ngModel)]="initialize_query.biller_number"
+                     placeholder="Enter Meter Number"/>
+            </div>
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select State</label>
+              <select class="form-control form-control-solid"
+                      (change)="onChangeGroupState($event)"
+              >
+                <option value="">Select State</option>
+                <ng-container *ngFor="let state of bills?.electricity_grouped">
+                  <option [value]="state">{{state}}</option>
+                </ng-container>
+                <option [value]="null">Others</option>
+              </select>
+            </div>
+
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Disco</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.sub_service_id"
+                      (change)="onSelectDiscoPackage()"
+              >
+                <option value="">Select Data Plan</option>
+                <ng-container *ngFor="let data of discos">
+                  <option [value]="data?.id">{{data?.display_name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Payment type</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.type">
+                <option value="">Select payment type</option>
+                <ng-container *ngFor="let data of electricity_payment_type">
+                  <option [value]="data">{{data | titlecase}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Amount</label>
+              <input type="number" class="form-control form-control-solid"
+                     [(ngModel)]="initialize_query.amount"
+                     placeholder="Enter Purchase Amount"/>
+            </div>
+
+
+            <button class="btn btn-primary"
+                    [disabled]=" (initialize_data?.sub_service_id && initialize_query.biller_number && initialize_query.amount) || initialize_loader"
+                    (click)="onInitializePurchase()">
+              Confirm Purchase <span *ngIf="initialize_loader"><i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+
+
+      </ng-container>
+
+      <!--      electricity stops here-->
+
+
+      <ng-container *ngIf="service_type == 'cable'">
+
+
+        <!--begin::Card-->
+        <div class="card card-flush pt-3 mb-5 mb-xl-10">
+          <!--begin::Card header-->
+          <div class="card-header">
+            <!--begin::Card title-->
+            <div class="card-title">
+              <h2 class="fw-bolder">{{bills?.services?.display_name}} Purchase</h2>
+            </div>
+            <!--begin::Card title-->
+
+          </div>
+          <!--end::Card header-->
+          <!--begin::Card body-->
+          <div class="card-body pt-3">
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Service</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.sub_service_id"
+                      (change)="onChangeCableSelectNetwork($event)"
+              >
+                <option value="">Select Service</option>
+                <ng-container *ngFor="let network of bills?.sub_services">
+                  <option [value]="network?.id">{{network?.display_name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Smart Card Number</label>
+              <input type="text" class="form-control form-control-solid" [(ngModel)]="initialize_query.biller_number"
+                     placeholder="Enter Smart Card Number"
+                     (change)="onChangeVerifyMerchant($event)"
+              />
+              <div style="display: flex; justify-content: end; width: 100%; flex-direction: column;">
+
+                <ng-container *ngIf="verifying_loader">
+                  <span><i class="fa fa-spin fa-spinner"></i> verifying ....</span>
+                </ng-container>
+
+
+                <ng-container *ngIf="verified_status_failed">
+                  <span style="color: red; cursor: pointer;" (click)="onChangeVerifyMerchant(null)">Smart card verification failed. Tap to retry</span>
+                </ng-container>
+
+                <ng-container *ngIf="!verifying_loader && !verified_status_failed && verify_data">
+                  <div style="width: 100%;     display: flex;justify-content: space-between; margin-top:10px;">
+
+                    <div>
+                      {{verify_data?.customer_name}}
+                    </div>
+                    <div *ngIf="verify_data?.renewal_amount">
+                      <span class="badge "
+                            [ngClass]="{'badge-success' : !confirm_upgrade_top_up, 'badge-warning' : confirm_upgrade_top_up}"
+                            (click)="confirmUpgradeTopUp()">
+                        {{confirm_upgrade_top_up ? 'cancel Renew / Top Up' : 'Renew / Top up '}}
+                      </span>
+                    </div>
+
+                  </div>
+                  <div style="width: 100%;     display: flex;justify-content: space-between; margin-top:10px;" *ngIf="verify_data?.due_date">
+
+                    <div>
+                      Due Data :
+                    </div>
+                    <div>
+                      <span>{{verify_data?.due_date | date : 'medium'}}</span>
+                    </div>
+
+                  </div>
+                  <div style="width: 100%;     display: flex;justify-content: space-between; margin-top:10px;" *ngIf="verify_data?.renewal_amount">
+
+                    <div>
+                      Renewal Amount :
+                    </div>
+                    <div>
+                      <span>₦{{(verify_data?.renewal_amount | number) || 0}}</span>
+                    </div>
+
+                  </div>
+                </ng-container>
+
+
+              </div>
+            </div>
+
+            <div class="mb-10" *ngIf="!confirm_upgrade_top_up">
+              <label for="exampleFormControlInput1" class="required form-label">Select Packages</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.package_id"
+                      (change)="onChangeSelectCurrentPackage($event)"
+              >
+                <option value="">Select Packages</option>
+                <ng-container *ngFor="let data of cablePlan">
+                  <option [value]="data?.id">{{data?.name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+
+            <div class="mb-10" *ngIf="duration_amount.length > 0">
+              <label for="exampleFormControlInput1" class="required form-label">Select Duration</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.duration"
+                      (click)="onSetAmountForCable($event)">
+                <option value="">Select Package Duration</option>
+                <ng-container *ngFor="let data of duration_amount;  let i = index">
+                  <option [value]="i">{{data?.monthsPaidFor}} Month(s), ₦{{(data?.price | number) || 0}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+
+            <div class="mb-10" *ngIf="addons.length > 0">
+              <label for="exampleFormControlInput1" class="required form-label">Select Package Addons</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.addon"
+                      (change)="onSelectAddonDuration($event)">
+                <option value="">Select Package Addons</option>
+                <ng-container *ngFor="let data of addons; let i = index">
+                  <option [value]="i">{{data?.name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="mb-10" *ngIf="addon_duration.length > 0">
+              <label for="exampleFormControlInput1" class="required form-label">Select Addon Duration</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.addon_duration">
+                <option value="">Select Package Addon Duration</option>
+                <ng-container *ngFor="let data of addon_duration;  let i = index">
+                  <option [value]="i">{{data?.monthsPaidFor}} Month(s), ₦{{(data?.price | number) || 0}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="mb-10" *ngIf="initialize_query.amount || confirm_upgrade_top_up">
+              <label for="exampleFormControlInput1" class="required form-label">Amount</label>
+              <input type="number" class="form-control form-control-solid"
+                     [(ngModel)]="initialize_query.amount"
+                     placeholder="Enter Purchase Amount" [readOnly]="!confirm_upgrade_top_up"/>
+            </div>
+
+
+            <button class="btn btn-primary"
+                    [disabled]=" (initialize_data?.sub_service_id && initialize_query.biller_number && initialize_query.amount) || initialize_loader"
+                    (click)="onInitializePurchase()">
+              Confirm Purchase <span *ngIf="initialize_loader"><i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+
+
+      </ng-container>
+
+      <!--      cable stops here -->
+      <ng-container *ngIf="service_type == 'airtime_to_cash'">
+
+
+        <!--begin::Card-->
+        <div class="card card-flush pt-3 mb-5 mb-xl-10">
+          <!--begin::Card header-->
+          <div class="card-header">
+            <!--begin::Card title-->
+            <div class="card-title">
+              <h2 class="fw-bolder">{{bills?.services?.display_name}} Purchase</h2>
+            </div>
+            <!--begin::Card title-->
+
+          </div>
+          <!--end::Card header-->
+          <!--begin::Card body-->
+          <div class="card-body pt-3">
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Network</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.sub_service_id">
+                <option value="">Select Network</option>
+                <ng-container *ngFor="let network of bills?.sub_services">
+                  <option [value]="network?.id">{{network?.display_name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Airtime Amount</label>
+              <input type="number" class="form-control form-control-solid"
+                     [(ngModel)]="initialize_query.amount"
+                     (change)="onCalculateAmountToCredit($event)"
+                     placeholder="Enter Purchase Amount"/>
+            </div>
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Amount to be credited</label>
+              <input type="number" class="form-control form-control-solid"
+                     [(ngModel)]="airtime_query.amount"
+                     [readOnly]="true"
+                     placeholder="Enter Purchase Amount"/>
+            </div>
+
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Transfer Mode</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.type">
+                <option value="">Select transfer mode</option>
+                <ng-container *ngFor="let network of airtime_to_cash_payment_type">
+                  <option [value]="network">{{network | titlecase}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+
+            <div class="mb-10" *ngIf="initialize_query.type">
+              <label for="exampleFormControlInput1"
+                     class="required form-label">{{initialize_query.type == 'pin' ? 'Enter Pin' : 'Enter Phone Number'}}</label>
+              <input type="text" class="form-control form-control-solid" [(ngModel)]="initialize_query.biller_number"
+                     [placeholder]="initialize_query.type == 'pin' ? 'Enter Pin' : 'Enter Phone Number'"/>
+            </div>
+
+
+            <button class="btn btn-primary"
+                    [disabled]=" (initialize_data?.sub_service_id && initialize_query.biller_number && initialize_query.amount) || initialize_loader"
+                    (click)="onInitializePurchase()">
+              Confirm Purchase <span *ngIf="initialize_loader"><i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+
+
+      </ng-container>
+
+
+      <!--      airtime to cash stops here -->
+
+
+      <ng-container *ngIf="service_type == 'education'">
+
+
+        <!--begin::Card-->
+        <div class="card card-flush pt-3 mb-5 mb-xl-10">
+          <!--begin::Card header-->
+          <div class="card-header">
+            <!--begin::Card title-->
+            <div class="card-title">
+              <h2 class="fw-bolder">{{bills?.services?.display_name}} Purchase</h2>
+            </div>
+            <!--begin::Card title-->
+
+          </div>
+          <!--end::Card header-->
+          <!--begin::Card body-->
+          <div class="card-body pt-3">
+
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Education</label>
+              <select class="form-control form-control-solid"
+                      [(ngModel)]="initialize_query.sub_service_id"
+                      (change)="onChangeEducationService($event)"
+              >
+                <option value="">Select educational plan</option>
+                <ng-container *ngFor="let edu of bills?.sub_services">
+                  <option [value]="edu?.id">{{edu?.display_name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Scratch Card </label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.package_id"
+                      (change)="onEducationPackageSelected()"
+              >
+                <option value="">Select Data Plan</option>
+                <ng-container *ngFor="let data of plan">
+                  <option [value]="data?.id">{{data?.name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Amount (₦)</label>
+              <input type="number" class="form-control form-control-solid"
+                     [(ngModel)]="initialize_query.amount"
+                     [readOnly]="true"
+                     placeholder="Enter Purchase Amount"/>
+            </div>
+
+
+            <button class="btn btn-primary"
+                    [disabled]=" (initialize_data?.sub_service_id && initialize_query.biller_number && initialize_query.amount) || initialize_loader"
+                    (click)="onInitializePurchase()">
+              Confirm Purchase <span *ngIf="initialize_loader"><i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+
+
+      </ng-container>
+
+      <!--      education stops here-->
+
+      <ng-container *ngIf="service_type == 'data_e_pin'">
+
+        <!--begin::Card-->
+        <div class="card card-flush pt-3 mb-5 mb-xl-10">
+          <!--begin::Card header-->
+          <div class="card-header">
+            <!--begin::Card title-->
+            <div class="card-title">
+              <h2 class="fw-bolder">{{bills?.services?.display_name}} Purchase</h2>
+            </div>
+            <!--begin::Card title-->
+
+          </div>
+          <!--end::Card header-->
+          <!--begin::Card body-->
+          <div class="card-body pt-3">
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Network</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.sub_service_id">
+                <option value="">Select Network</option>
+                <ng-container *ngFor="let network of bills?.sub_services">
+                  <option [value]="network?.id">{{network?.display_name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Data Amount</label>
+              <input type="number" class="form-control form-control-solid"
+                     [(ngModel)]="initialize_query.amount"
+                     placeholder="Enter Purchase Amount"/>
+            </div>
+
+
+            <button class="btn btn-primary"
+                    [disabled]=" (initialize_data?.sub_service_id && initialize_query.biller_number && initialize_query.amount) || initialize_loader"
+                    (click)="onInitializePurchase()">
+              Confirm Purchase <span *ngIf="initialize_loader"><i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+
+      </ng-container>
+
+      <!--      data e pin stops here-->
+
+      <ng-container *ngIf="service_type == 'airtime_e_pin'">
+
+        <!--begin::Card-->
+        <div class="card card-flush pt-3 mb-5 mb-xl-10">
+          <!--begin::Card header-->
+          <div class="card-header">
+            <!--begin::Card title-->
+            <div class="card-title">
+              <h2 class="fw-bolder">{{bills?.services?.display_name}} Purchase</h2>
+            </div>
+            <!--begin::Card title-->
+
+          </div>
+          <!--end::Card header-->
+          <!--begin::Card body-->
+          <div class="card-body pt-3">
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Select Network</label>
+              <select class="form-control form-control-solid" [(ngModel)]="initialize_query.sub_service_id">
+                <option value="">Select Network</option>
+                <ng-container *ngFor="let network of bills?.sub_services">
+                  <option [value]="network?.id">{{network?.display_name}}</option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Airtime Amount</label>
+              <input type="number" class="form-control form-control-solid"
+                     [(ngModel)]="initialize_query.amount"
+                     placeholder="Enter Purchase Amount"/>
+            </div>
+
+
+            <button class="btn btn-primary"
+                    [disabled]=" (initialize_data?.sub_service_id && initialize_query.biller_number && initialize_query.amount) || initialize_loader"
+                    (click)="onInitializePurchase()">
+              Confirm Purchase <span *ngIf="initialize_loader"><i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+
+      </ng-container>
+
+      <!--      airtime e pin stops here-->
+
+
+    </ng-container>
+
+
+    <ng-container *ngIf="preview">
+
+
+      <div class="card card-flush pt-3 mb-0" data-kt-sticky="true" data-kt-sticky-name="subscription-summary"
+           data-kt-sticky-offset="{default: false, lg: '200px'}" data-kt-sticky-width="{lg: '250px', xl: '300px'}"
+           data-kt-sticky-left="auto" data-kt-sticky-top="150px" data-kt-sticky-animation="false"
+           data-kt-sticky-zindex="95" style="">
+        <!--begin::Card header-->
+        <div class="card-header">
+          <!--begin::Card title-->
+          <div class="card-title">
+            <h2>Confirm Purchase</h2>
+          </div>
+          <!--end::Card title-->
+        </div>
+        <!--end::Card header-->
+        <!--begin::Card body-->
+        <div class="card-body pt-0 fs-6">
+
+          <!--begin::Section-->
+          <div class="mb-7">
+            <!--end::Title-->
+            <!--begin::Details-->
+            <div class="d-flex align-items-center mb-1">
+              <!--begin::Name-->
+              <a class="fw-bolder text-gray-800 text-hover-primary me-2">{{bills?.services?.display_name}}</a>
+              <!--end::Name-->
+            </div>
+            <!--end::Details-->
+            <!--begin::Email-->
+            <a class="fw-bold text-gray-600 text-hover-primary">{{selected_sub_service?.display_name}}</a>
+            <!--end::Email-->
+
+
+            <ng-container *ngIf="service_type == 'data' || service_type == 'cable'">
+              <!--begin::Details-->
+              <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+                <!--begin::Name-->
+                <a class="fw-bolder text-gray-800 text-hover-primary me-2">Selected Plan</a>
+                <!--end::Name-->
+              </div>
+              <!--end::Details-->
+              <!--begin::Email-->
+              <a class="fw-bold text-gray-600 text-hover-primary">{{selected_plan?.name}}</a>
+            </ng-container>
+            <!--end::Email-->
+
+
+          </div>
+          <!--end::Section-->
+          <!--begin::Seperator-->
+          <div class="separator separator-dashed mb-7"></div>
+
+
+          <!--begin::Section-->
+          <div class="mb-7">
+            <!--begin::Title-->
+            <h5 class="mb-3"></h5>
+            <!--end::Title-->
+
+
+            <!--begin::Details-->
+            <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+              <!--begin::Name-->
+              <ng-container *ngIf="['airtime', 'data', 'epin'].includes(service_type)">
+                <a class="fw-bolder text-gray-800 text-hover-primary me-2">Phone Number</a>
+              </ng-container>
+              <ng-container *ngIf="['electricity'].includes(service_type)">
+                <a class="fw-bolder text-gray-800 text-hover-primary me-2">Meter Number</a>
+              </ng-container>
+              <ng-container *ngIf="['airtime_to_cash'].includes(service_type)">
+                <a class="fw-bolder text-gray-800 text-hover-primary me-2">{{initialize_query?.type | titlecase}}</a>
+              </ng-container>
+              <ng-container *ngIf="['cable'].includes(service_type)">
+                <a class="fw-bolder text-gray-800 text-hover-primary me-2">Smart Card Number</a>
+              </ng-container>
+              <!--end::Name-->
+            </div>
+            <!--end::Details-->
+            <!--begin::Email-->
+            <a class="fw-bold text-gray-600 text-hover-primary">{{initialize_query?.biller_number}}</a>
+            <!--end::Email-->
+
+
+            <ng-container *ngIf="['cable'].includes(service_type)">
+
+              <!--begin::Details-->
+              <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+                <!--begin::Name-->
+                <a class="fw-bolder text-gray-800 text-hover-primary me-2">Subscription Type</a>
+                <!--end::Name-->
+              </div>
+              <!--begin::Email-->
+              <a
+                class="fw-bold text-gray-600 text-hover-primary">{{confirm_upgrade_top_up ? 'Renewal' : 'Change Bonquet'}}</a>
+              <!--end::Email-->
+
+
+              <ng-container *ngIf="confirm_upgrade_top_up">
+
+
+                <ng-container *ngFor="let item of verify_data?.can_renew?.currentBouquetRaw?.items; let first = first">
+
+                  <ng-container *ngIf="first">
+                    <!--begin::Details-->
+                    <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+                      <!--begin::Name-->
+                      <a class="fw-bolder text-gray-800 text-hover-primary me-2">Bouquet Name</a>
+                      <!--end::Name-->
+                    </div>
+                    <!--begin::Email-->
+                    <a
+                      class="fw-bold text-gray-600 text-hover-primary">{{item?.name}}</a>
+                    <!--end::Email-->
+
+
+                    <!--begin::Details-->
+                    <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+                      <!--begin::Name-->
+                      <a class="fw-bolder text-gray-800 text-hover-primary me-2">Bouquet Price</a>
+                      <!--end::Name-->
+                    </div>
+                    <!--begin::Email-->
+                    <a
+                      class="fw-bold text-gray-600 text-hover-primary">₦{{item?.price | number}}</a>
+                    <!--end::Email-->
+                  </ng-container>
+
+                  <ng-container *ngIf="!first">
+
+                    <!--begin::Seperator-->
+                    <div class="separator separator-dashed mb-7"></div>
+                    <!--begin::Details-->
+                    <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+                      <!--begin::Name-->
+                      <a class="fw-bolder text-gray-800 text-hover-primary me-2">Addon Name</a>
+                      <!--end::Name-->
+                    </div>
+                    <!--begin::Email-->
+                    <a
+
+                      class="fw-bold text-gray-600 text-hover-primary">{{item?.name}} / ₦{{item?.price | number}}</a>
+                    <!--end::Email-->
+
+                    <!--begin::Seperator-->
+                    <div class="separator separator-dashed mb-7"></div>
+
+                  </ng-container>
+
+
+                </ng-container>
+
+              </ng-container>
+
+
+              <ng-container *ngIf="!confirm_upgrade_top_up">
+                <!--begin::Seperator-->
+                <div class="separator separator-dashed mb-7"></div>
+                <!--begin::Details-->
+                <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+                  <!--begin::Name-->
+                  <a class="fw-bolder text-gray-800 text-hover-primary me-2">Addon Selected</a>
+                  <!--end::Name-->
+                </div>
+                <!--begin::Email-->
+                <a
+
+                  class="fw-bold text-gray-600 text-hover-primary">{{selected_addon?.name}}
+                  / ₦{{addon_duration[initialize_query.addon_duration]['price'] | number}}</a>
+                <!--end::Email-->
+              </ng-container>
+
+            </ng-container>
+
+            <!--begin::Details-->
+            <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+              <!--begin::Name-->
+              <a class="fw-bolder text-gray-800 text-hover-primary me-2">Amount</a>
+              <!--end::Name-->
+            </div>
+            <!--end::Details-->
+            <!--begin::Email-->
+            <a class="fw-bold text-gray-600 text-hover-primary">₦{{initialize_query?.amount | number}}</a>
+            <!--end::Email-->
+
+            <!--begin::Details-->
+            <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+              <!--begin::Name-->
+              <a class="fw-bolder text-gray-800 text-hover-primary me-2">Charge Amount</a>
+              <!--end::Name-->
+            </div>
+            <!--end::Details-->
+            <!--begin::Email-->
+            <a class="fw-bold text-gray-600 text-hover-primary">₦{{initialize_data?.charge_amount}}</a>
+            <!--end::Email-->
+
+            <ng-container *ngIf="addon_duration">
+              <ng-container *ngIf="addon_duration[initialize_query.addon_duration]?.price">
+                <!--begin::Details-->
+                <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+                  <!--begin::Name-->
+                  <a class="fw-bolder text-gray-800 text-hover-primary me-2">Total Amount To Charge (Addon
+                    Inclusive)</a>
+                  <!--end::Name-->
+                </div>
+                <!--end::Details-->
+                <!--begin::Email-->
+                <a
+                  class="fw-bold text-gray-600 text-hover-primary">₦{{initialize_data?.charge_amount + addon_duration[initialize_query.addon_duration]['price']}}</a>
+                <!--end::Email-->
+              </ng-container>
+            </ng-container>
+
+            <!--begin::Details-->
+            <div class="d-flex align-items-center mb-1" style="margin-top: 10px;">
+              <!--begin::Name-->
+              <a class="fw-bolder text-gray-800 text-hover-primary me-2">Commission</a>
+              <!--end::Name-->
+            </div>
+            <!--end::Details-->
+            <a class="fw-bold text-gray-600 text-hover-primary">
+              <ng-container *ngIf="initialize_data?.user_commission?.commission_type == 'normal'">
+                ₦{{initialize_data?.user_commission?.commission}}
+              </ng-container>
+
+              <ng-container *ngIf="initialize_data?.user_commission?.commission_type !== 'normal'">
+                {{initialize_data?.user_commission?.commission}}%
+              </ng-container>
+            </a>
+
+
+          </div>
+          <!--end::Section-->
+
+
+          <!--begin::Seperator-->
+          <div class="separator separator-dashed mb-7"></div>
+
+          <ng-container *ngIf="initialize_data?.extra_info?.customer_name">
+            <!--begin::Section-->
+            <div class="mb-7">
+              <!--begin::Title-->
+              <h5 class="mb-3">Customer details</h5>
+              <!--end::Title-->
+              <!--begin::Details-->
+              <div class="d-flex align-items-center mb-1">
+                <!--begin::Name-->
+                <a class="fw-bolder text-gray-800 text-hover-primary me-2">Customer Name</a>
+              </div>
+              <!--end::Details-->
+              <!--begin::Email-->
+              <a class="fw-bold text-gray-600 text-hover-primary">{{initialize_data?.extra_info?.customer_name}}</a>
+              <!--end::Email-->
+
+              <ng-container *ngIf="initialize_data?.extra_info?.customer_address">
+                <!--begin::Details-->
+                <div class="d-flex align-items-center mb-1 mt-7">
+                  <!--begin::Name-->
+                  <a class="fw-bolder text-gray-800 text-hover-primary me-2">Customer Address</a>
+                </div>
+                <!--end::Details-->
+                <!--begin::Email-->
+                <a
+                  class="fw-bold text-gray-600 text-hover-primary">{{initialize_data?.extra_info?.customer_address}}</a>
+                <!--end::Email-->
+              </ng-container>
+
+
+            </div>
+
+
+          </ng-container>
+
+          <div class="mb-7">
+            <!--begin::Title-->
+            <div class="mb-10">
+              <label for="exampleFormControlInput1" class="required form-label">Enter Pin</label>
+              <input type="password" class="form-control form-control-solid"
+                     [(ngModel)]="airtime_query.pin"
+                     placeholder="Enter Pin"/>
+            </div>
+
+          </div>
+          <!--end::Section-->
+          <!--begin::Seperator-->
+          <div class="separator separator-dashed mb-7"></div>
+          <!--end::Seperator-->
+          <!--end::Section-->
+          <!--begin::Actions-->
+          <div class="mb-0">
+            <button type="submit" class="btn btn-primary" id="kt_subscriptions_create_button"
+                    [disabled]="purchase_service_loader"
+                    (click)="purchaseService()"
+            >
+              <!--begin::Indicator-->
+              <span class="indicator-label">Complete Purchase</span>
+              <span *ngIf="purchase_service_loader"> <i class="fa fa-spin fa-spinner"></i></span>
+              <!--end::Indicator-->
+            </button>
+          </div>
+          <div class="mb-0 mt-5">
+            <button type="submit" class="btn btn-light-danger" id="kt_subscriptions_create_button"
+                    (click)="onCancelPurchase()"
+            >
+              Cancel Purchase
+            </button>
+          </div>
+          <!--end::Actions-->
+        </div>
+        <!--end::Card body-->
+      </div>
+
+
+    </ng-container>
+
+  </div>
+</div>

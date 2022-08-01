@@ -1,0 +1,269 @@
+<!--begin::Container-->
+<div class="container-xxl" id="kt_content_container">
+  <!--begin::Form-->
+  <div id="kt_ecommerce_add_product_form"
+       class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework"
+       data-kt-redirect="../../demo7/dist/apps/ecommerce/catalog/products.html">
+    <!--begin::Aside column-->
+
+    <!--end::Aside column-->
+    <!--begin::Main column-->
+    <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+      <!--begin:::Tabs-->
+      <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-n2">
+        <!--begin:::Tab item-->
+        <li class="nav-item">
+          <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+             href="#kt_ecommerce_add_product_general">General</a>
+        </li>
+        <!--end:::Tab item-->
+
+      </ul>
+      <!--end:::Tabs-->
+      <!--begin::Tab content-->
+      <div class="tab-content">
+        <!--begin::Tab pane-->
+        <div class="tab-pane fade show active" id="kt_ecommerce_add_product_general" role="tab-panel">
+          <div class="d-flex flex-column gap-7 gap-lg-10">
+            <!--begin::General options-->
+            <div class="card card-flush py-4">
+              <!--begin::Card header-->
+              <div class="card-header">
+                <div class="card-title">
+                  <h2>General</h2>
+                </div>
+              </div>
+
+              <!--begin::Input group-->
+              <div class="fv-row mb-10">
+                <div class="row fv-row mb-7">
+                  <app-notification [type]="type" [message]="message" [title]="title"></app-notification>
+                </div>
+              </div>
+
+              <!--end::Card header-->
+              <!--begin::Card body-->
+              <div class="card-body pt-0">
+                <!--begin::Input group-->
+                <div class="mb-10 fv-row fv-plugins-icon-container">
+                  <!--begin::Label-->
+                  <label class="required form-label">Product Name</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <input type="text" name="product_name" class="form-control mb-2" placeholder="Product name" value=""
+                         [(ngModel)]="product_create.name">
+                  <!--end::Input-->
+                  <!--begin::Description-->
+                  <div class="text-muted fs-7">A product name is required and recommended to be unique.</div>
+                  <!--end::Description-->
+                  <div class="fv-plugins-message-container invalid-feedback"></div>
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Input group-->
+                <div class="mb-10 fv-row fv-plugins-icon-container">
+                  <!--begin::Label-->
+                  <label class="required form-label">Address</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <input type="text" name="product_name" class="form-control mb-2" placeholder="Product name" value=""
+                         (keyup)="onChangeAddress($event)"
+                         [(ngModel)]="product_create.address"
+                  >
+                  <!--end::Input-->
+                  <!--begin::Description-->
+                  <div class="text-muted fs-7">Current Product Address.</div>
+                  <!--end::Description-->
+                  <div class="fv-plugins-message-container invalid-feedback"></div>
+                </div>
+                <!--end::Input group-->
+
+                <ng-container *ngIf="searchLoader">
+                  <i class="fa fa-spin fa-spinner"></i>
+                </ng-container>
+
+                <ng-container *ngFor="let location of suggestedLocation">
+                  <p (click)="onSelectAddress(location)">{{location?.formattedAddress}}</p>
+                </ng-container>
+
+              </div>
+              <!--end::Card header-->
+            </div>
+            <!--end::General options-->
+            <!--begin::Media-->
+            <div class="card card-flush py-4">
+              <!--begin::Card header-->
+              <div class="card-header">
+                <div class="card-title">
+                  <h2>Media</h2>
+                </div>
+              </div>
+              <!--end::Card header-->
+              <!--begin::Card body-->
+              <div class="card-body pt-0">
+                <!--begin::Input group-->
+                <div class="fv-row mb-2" *ngIf="availableFiles.length == 0">
+                  <!--begin::Dropzone-->
+                  <div class="dropzone dz-clickable" id="kt_ecommerce_add_product_media" (click)="file.click()">
+                    <!--begin::Message-->
+                    <div class="dz-message needsclick">
+                      <!--begin::Icon-->
+                      <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                      <!--end::Icon-->
+                      <!--begin::Info-->
+                      <div class="ms-4">
+                        <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Drop files here or click to upload.</h3>
+                        <span class="fs-7 fw-bold text-gray-400">Upload up to 4 files</span>
+                        <input type="file" #file (change)="onImageSelected($event)" style="display: none;"/>
+                      </div>
+                      <!--end::Info-->
+                    </div>
+                  </div>
+                  <!--end::Dropzone-->
+                </div>
+                <!--end::Input group-->
+
+
+                <div class="fv-row mb-2" *ngIf="availableFiles.length > 0">
+                  <!--begin::Dropzone-->
+                  <div class="dropzone dz-clickable dz-started" id="kt_ecommerce_add_product_media"
+                       (click)="file.click()">
+
+                    <input type="file" #file (change)="onImageSelected($event)" style="display: none;"/>
+
+                    <ng-container *ngFor="let image of availableFiles; let i= index">
+                      <div class="dz-preview dz-processing dz-image-preview dz-error dz-complete">
+                        <div class="dz-image">
+                          <img data-dz-thumbnail="" alt="1624118116484.jpg"
+                               [src]="image?.url" *ngIf="image?.url">
+                        </div>
+
+                        <div class="dz-details" *ngIf="image?.loading">
+                          <span class="fa fa-spin fa-spinner" data-dz-uploadprogress=""></span>
+                          <p>Uploading...</p>
+                        </div>
+                        <div class="dz-details" *ngIf="!image?.failed && !image?.loading">
+                          <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1"
+                               xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>
+                            Check</title>
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                              <path
+                                d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z"
+                                stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475"
+                                fill="#FFFFFF"></path>
+                            </g>
+                          </svg>
+                        </div>
+                        <div class="dz-details" style="display:block;" *ngIf="image?.failed">
+                          <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1"
+                               xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>
+                            Error</title>
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                              <g stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF"
+                                 fill-opacity="0.816519475">
+                                <path
+                                  d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z"></path>
+                              </g>
+                            </g>
+                          </svg>
+                        </div>
+
+                        <div class="dz-error-message" style="display:block;" *ngIf="image?.failed">
+                          <span data-dz-errormessage="">Server responded with 0 code.
+                          </span>
+                        </div>
+
+                        <a class="dz-remove" data-dz-remove=""
+                           (click)="$event.stopPropagation(); removeImage(image, i)">
+                          Remove file
+                        </a>
+
+                      </div>
+                    </ng-container>
+
+                  </div>
+                  <!--end::Dropzone-->
+                </div>
+
+
+                <!--begin::Description-->
+                <div class="text-muted fs-7">Set the product media gallery.</div>
+                <!--end::Description-->
+              </div>
+              <!--end::Card header-->
+            </div>
+            <!--end::Media-->
+            <!--begin::Pricing-->
+            <div class="card card-flush py-4">
+              <!--begin::Card header-->
+              <div class="card-header">
+                <div class="card-title">
+                  <h2>Pricing</h2>
+                </div>
+              </div>
+              <!--end::Card header-->
+              <!--begin::Card body-->
+              <div class="card-body pt-0">
+                <!--begin::Input group-->
+                <div class="mb-10 fv-row fv-plugins-icon-container">
+                  <!--begin::Label-->
+                  <label class="required form-label">Base Price</label>
+                  <!--end::Label-->
+                  <!--begin::Input-->
+                  <input type="text" name="price" class="form-control mb-2" placeholder="Product price" value=""
+                         [(ngModel)]="product_create.price">
+                  <!--end::Input-->
+                  <!--begin::Description-->
+                  <div class="text-muted fs-7">Set the product price.</div>
+                  <!--end::Description-->
+                  <div class="fv-plugins-message-container invalid-feedback"></div>
+                </div>
+                <!--end::Input group-->
+
+                <!--begin::Tax-->
+                <div class="d-flex flex-wrap gap-5">
+
+                  <!--begin::Input group-->
+                  <div class="fv-row w-100 flex-md-root">
+                    <!--begin::Label-->
+                    <label class="form-label">Available Radius</label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    <input type="number" class="form-control mb-2" value=""
+                           [(ngModel)]="product_create.available_radius">
+                    <!--end::Input-->
+                    <!--begin::Description-->
+                    <div class="text-muted fs-7">Proximity of customer able to purchase item.</div>
+                    <!--end::Description-->
+                  </div>
+                  <!--end::Input group-->
+                </div>
+                <!--end:Tax-->
+              </div>
+              <!--end::Card header-->
+            </div>
+            <!--end::Pricing-->
+          </div>
+        </div>
+        <!--end::Tab pane-->
+
+      </div>
+      <!--end::Tab content-->
+      <div class="d-flex justify-content-end">
+        <!--begin::Button-->
+        <a href="/user" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">Cancel</a>
+        <!--end::Button-->
+        <!--begin::Button-->
+        <button type="submit" id="kt_ecommerce_add_product_submit" class="btn btn-primary" (click)="onCreateProduct()">
+          <span class="indicator-label">Create Product</span>
+          <span class="fa fa-spin fa-spinner" *ngIf="loading"></span>
+        </button>
+        <!--end::Button-->
+      </div>
+    </div>
+    <!--end::Main column-->
+    <div></div>
+  </div>
+  <!--end::Form-->
+</div>
+<!--end::Container-->
