@@ -64,7 +64,7 @@ export class RegisterComponent implements OnInit {
     this.searchLoader = true;
     this.searchFailed = false;
 
-    this.searchCall = this.userService.searchAddress(address).subscribe(
+    this.searchCall = this.userService.searchNoAuth(address).subscribe(
       (response: any) => {
         this.searchLoader = false;
         this.searchFailed = false;

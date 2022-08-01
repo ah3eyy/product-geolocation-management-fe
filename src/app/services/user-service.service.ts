@@ -768,6 +768,14 @@ export class UserServiceService {
     );
   }
 
+  searchNoAuth(address: any) {
+    return this._httpClient.get(`${this.url}products/search?address=${address}`, {}).pipe(
+      switchMap((response: any) => {
+        return of(response);
+      })
+    );
+  }
+
   searchAddress(address: any) {
     return this._httpClient.get(`${this.url}products/search/${address}`, {}).pipe(
       switchMap((response: any) => {
